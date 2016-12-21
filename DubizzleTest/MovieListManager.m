@@ -36,6 +36,19 @@
     [connection start];
 }
 
+- (void) applyMovieFilter: (NSString *)minString : (NSString *)maxString
+{
+    NSString *urlString = [NSString stringWithFormat:@"https://api.themoviedb.org/3/discover/movie?api_key=8bbd6e918890081506dc33fa58f55c04&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=%@&primary_release_date.lte=%@", minString, maxString];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"GET"];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    if (responseData) {
+        responseData = nil;
+    }
+    [connection start];
+}
+
 
 #pragma mark - NSURLConnection delegate methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

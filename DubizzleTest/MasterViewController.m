@@ -10,6 +10,7 @@
 #import "DetailViewController.h"
 #import "MovieListTVC.h"
 
+
 #define MOVIE_POSTER_PREFIX_URL @"https://image.tmdb.org/t/p/w1280"
 
 @interface MasterViewController ()
@@ -23,11 +24,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isFilterImplemented = NO;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
+//    self.tableView.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
 }
 
@@ -64,6 +66,11 @@
         [controller setMovieID:movieData[@"id"]];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
         controller.navigationItem.leftItemsSupplementBackButton = YES;
+    }
+    else if ([[segue identifier] isEqualToString:@"addFilterView"])
+    {
+        FilterViewController *controller = (FilterViewController *)[segue destinationViewController];
+        [controller setDelegate:self];
     }
 }
 
@@ -122,10 +129,20 @@
     [filterButton addTarget:self
                      action:@selector(filterButtonPressed)
            forControlEvents:UIControlEventTouchUpInside];
-    filterButton.backgroundColor = [UIColor darkGrayColor];
+    filterButton.backgroundColor = [UIColor darkTextColor];
+    
+    UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 95, 30)];
+    [resetButton setTitle:@"Reset"
+                  forState:UIControlStateNormal];
+    [resetButton addTarget:self
+                     action:@selector(resetButtonPressed)
+           forControlEvents:UIControlEventTouchUpInside];
+    resetButton.backgroundColor = [UIColor darkTextColor];
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 50)];
-    [headerView setBackgroundColor:[UIColor lightGrayColor]];
+    [headerView setBackgroundColor:[UIColor darkGrayColor]];
     [headerView addSubview:filterButton];
+    [headerView addSubview:resetButton];
     return headerView;
 }
 
@@ -140,16 +157,35 @@
 
 - (void) loadMoreMovies
 {
-    countForPagination++;
-    NSString *countString = [NSString stringWithFormat:@"%d", countForPagination];
-    [movieManager fetchMovieList:countString];
+    if (!isFilterImplemented) {
+        countForPagination++;
+        NSString *countString = [NSString stringWithFormat:@"%d", countForPagination];
+        [movieManager fetchMovieList:countString];
+    }
 }
 
 
 #pragma mark - FilterButton
 - (void) filterButtonPressed
 {
-    
+    [self performSegueWithIdentifier:@"addFilterView" sender:nil];
+}
+- (void) resetButtonPressed
+{
+    isFilterImplemented = NO;
+    [movieDataArray removeAllObjects];
+    [self.tableView reloadData];
+    countForPagination = 1;
+    [movieManager fetchMovieList:@"1"];
+}
+
+#pragma mark - Filter delegate methods
+- (void) maxMinDateSelected : (NSDictionary *)dateDictionary
+{
+    isFilterImplemented = YES;
+    [movieDataArray removeAllObjects];
+    [self.tableView reloadData];
+    [movieManager applyMovieFilter:dateDictionary[@"min"] :dateDictionary[@"max"]];
 }
 
 @end

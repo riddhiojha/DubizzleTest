@@ -67,7 +67,6 @@
     self.ratingLabel.text = ratingLabelText;
     self.runtimeLabel.text = runtimeLabelText;
     self.movieDescriptionTextView.text = dataDictionary[@"overview"];
-    
 }
 
 

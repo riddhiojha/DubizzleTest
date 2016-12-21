@@ -38,6 +38,7 @@
 		FD6DDADB1E0AB30D00781B25 /* UIView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6DDAC61E0AB30D00781B25 /* UIView+WebCache.m */; };
 		FD6DDADC1E0AB30D00781B25 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6DDAC81E0AB30D00781B25 /* UIView+WebCacheOperation.m */; };
 		FD6DDADF1E0AB3D300781B25 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = FD6DDADE1E0AB3D300781B25 /* placeholder.png */; };
+		FD6DDAE71E0B0CED00781B25 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6DDAE61E0B0CED00781B25 /* FilterViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,8 @@
 		FD6DDAC71E0AB30D00781B25 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		FD6DDAC81E0AB30D00781B25 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		FD6DDADE1E0AB3D300781B25 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		FD6DDAE51E0B0CED00781B25 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
+		FD6DDAE61E0B0CED00781B25 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +183,8 @@
 				FD6DDA9C1E0A8C6A00781B25 /* MovieListManager.m */,
 				FD6DDA981E0A88E200781B25 /* MovieListTVC.h */,
 				FD6DDA991E0A88E200781B25 /* MovieListTVC.m */,
+				FD6DDAE51E0B0CED00781B25 /* FilterViewController.h */,
+				FD6DDAE61E0B0CED00781B25 /* FilterViewController.m */,
 				FD6DDA6B1E0A84CF00781B25 /* Main.storyboard */,
 				FD6DDA6E1E0A84CF00781B25 /* Assets.xcassets */,
 				FD6DDA701E0A84CF00781B25 /* LaunchScreen.storyboard */,
@@ -420,6 +425,7 @@
 				FD6DDACB1E0AB30D00781B25 /* NSData+ImageContentType.m in Sources */,
 				FD6DDAD51E0AB30D00781B25 /* UIButton+WebCache.m in Sources */,
 				FD6DDA611E0A84CF00781B25 /* main.m in Sources */,
+				FD6DDAE71E0B0CED00781B25 /* FilterViewController.m in Sources */,
 				FD6DDACE1E0AB30D00781B25 /* SDImageCacheConfig.m in Sources */,
 				FD6DDACD1E0AB30D00781B25 /* SDImageCache.m in Sources */,
 				FD6DDA9D1E0A8C6A00781B25 /* MovieListManager.m in Sources */,

@@ -23,5 +23,6 @@
 @property (nonatomic, assign) id<MovieListManagerDelegate> delegate;
 - (void) fetchMovieList : (NSString *) pageNumber;
 - (void) fetchMovieDetails : (NSString *) movieId;
+- (void) applyMovieFilter: (NSString *)minString : (NSString *)maxString;
 
 @end
