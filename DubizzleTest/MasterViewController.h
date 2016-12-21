@@ -15,6 +15,7 @@
 {
     MovieListManager *movieManager;
     NSMutableArray *movieDataArray;
+    int countForPagination;
 }
 
 @property (strong, nonatomic) DetailViewController *detailViewController;

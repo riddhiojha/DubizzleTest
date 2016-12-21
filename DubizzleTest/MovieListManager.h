@@ -21,5 +21,7 @@
     NSMutableData *responseData;
 }
 @property (nonatomic, assign) id<MovieListManagerDelegate> delegate;
-- (void) fetchMovieList;
+- (void) fetchMovieList : (NSString *) pageNumber;
+- (void) fetchMovieDetails : (NSString *) movieId;
+
 @end

@@ -10,9 +10,10 @@
 
 @implementation MovieListManager
 
-- (void) fetchMovieList
+- (void) fetchMovieList : (NSString *) pageNumber
 {
-    NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/4/list/1?page=1&api_key=8bbd6e918890081506dc33fa58f55c04"];
+    NSString *urlString = [NSString stringWithFormat:@"https://api.themoviedb.org/4/list/1?page=%@&api_key=8bbd6e918890081506dc33fa58f55c04", pageNumber];
+    NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"GET"];
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
@@ -21,6 +22,20 @@
     }
     [connection start];
 }
+
+- (void) fetchMovieDetails : (NSString *) movieId
+{
+    NSString *urlString = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%@?api_key=8bbd6e918890081506dc33fa58f55c04", movieId];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"GET"];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    if (responseData) {
+        responseData = nil;
+    }
+    [connection start];
+}
+
 
 #pragma mark - NSURLConnection delegate methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

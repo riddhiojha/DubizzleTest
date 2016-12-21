@@ -5,7 +5,7 @@
 //  Created by Riddhi Ojha on 12/21/16.
 //
 //
-
+#import "SDWebImage/UIImageView+WebCache.h"
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "MovieListTVC.h"
@@ -33,9 +33,11 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear: animated];
     movieManager = [[MovieListManager alloc] init];
     movieManager.delegate = self;
-    [movieManager fetchMovieList];
+    countForPagination = 1;
+    [movieManager fetchMovieList:@"1"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,9 +59,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = self.objects[indexPath.row];
-        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setDetailItem:object];
+        NSDictionary *movieData = movieDataArray[indexPath.row];
+        DetailViewController *controller = (DetailViewController *)[segue destinationViewController];
+        [controller setMovieID:movieData[@"id"]];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
         controller.navigationItem.leftItemsSupplementBackButton = YES;
     }
@@ -68,8 +70,13 @@
 #pragma mark - Movie manager delegate methods
 - (void) movieListManagerCallback : (NSDictionary *) reponseDictionary
 {
-    [self.indicatorLoading stopAnimating];
-    movieDataArray = reponseDictionary[@"response"][@"results"];
+    if (movieDataArray.count) {
+        [movieDataArray addObjectsFromArray:reponseDictionary[@"response"][@"results"]];
+    }
+    else
+    {
+        movieDataArray = reponseDictionary[@"response"][@"results"];
+    }
     [self.tableView reloadData];
 }
 
@@ -88,12 +95,17 @@
     NSDictionary *movieData = movieDataArray[indexPath.row];
     
     NSString *urlString = [NSString stringWithFormat:@"%@%@", MOVIE_POSTER_PREFIX_URL, movieData[@"poster_path"]];
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
-    cell.moviePoster.image = [UIImage imageWithData:imageData];
+    [cell.moviePoster sd_setImageWithURL:[NSURL URLWithString:urlString]
+                      placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
     cell.movieTitle.text = movieData[@"original_title"];
     cell.movieDescription.text = movieData[@"overview"];
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"showDetail" sender:nil];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -115,6 +127,22 @@
     [headerView setBackgroundColor:[UIColor lightGrayColor]];
     [headerView addSubview:filterButton];
     return headerView;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
+    if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+        // This is the last cell
+        [self loadMoreMovies];
+    }
+}
+
+- (void) loadMoreMovies
+{
+    countForPagination++;
+    NSString *countString = [NSString stringWithFormat:@"%d", countForPagination];
+    [movieManager fetchMovieList:countString];
 }
 
 
